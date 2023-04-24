@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "adc.h"
+#include "dma.h"
 #include "i2c.h"
 #include "rtc.h"
 #include "usart.h"
@@ -75,13 +76,18 @@ int main(void)
 	uint32_t outdoorADCValue = 0;
 	uint8_t x = 0;
 	uint8_t y = 0;
-	uint16_t indoorLimitHighValue = 1200;
-	uint16_t indoorLimitLowValue = 800;
-	uint16_t outdoorLimitHighValue = 1200;
-	uint16_t outdoorLimitLowValue = 800;
+	uint16_t indoorLimitHighValue = 1100;
+	uint16_t indoorLimitLowValue = 900;
+	uint16_t outdoorLimitHighValue = 1100;
+	uint16_t outdoorLimitLowValue = 900;
 	uint8_t i = 0;
 	uint8_t j = 0;
 	uint8_t k = 0;
+	uint8_t rxBuffer[1];
+	uint8_t charCmd;
+	uint8_t regularTime_Hour = 0;
+	uint8_t regularTimeAM_Hour = 8;
+	uint8_t regularTimePM_Hour = 20;
 	/* USER CODE END 1 */
 
 	/* MCU Configuration--------------------------------------------------------*/
@@ -102,6 +108,7 @@ int main(void)
 
 	/* Initialize all configured peripherals */
 	MX_GPIO_Init();
+	MX_DMA_Init();
 	MX_ADC1_Init();
 	MX_RTC_Init();
 	MX_USART1_UART_Init();
@@ -132,6 +139,9 @@ int main(void)
 	/* USER CODE BEGIN WHILE */
 	while (1)
 	{
+		HAL_UART_Receive_DMA(&huart1, rxBuffer, 1);
+		charCmd = rxBuffer[0];
+
 		HAL_ADC_Start(&hadc1);
 		HAL_ADC_PollForConversion(&hadc1, 50);
 		indoorADCValue = HAL_ADC_GetValue(&hadc1);
@@ -179,47 +189,66 @@ int main(void)
 			j = 2;
 			break;
 		default:
-			OLED_ShowChar(x + 16 * 2 + 8 * 1, y + 2 * 3, 'A', 16);
-			OLED_ShowChar(x + 16 * 2 + 8 * 2, y + 2 * 3, 'u', 16);
-			OLED_ShowChar(x + 16 * 2 + 8 * 3, y + 2 * 3, 't', 16);
-			OLED_ShowChar(x + 16 * 2 + 8 * 4, y + 2 * 3, 'o', 16);
 			j = 0;
 			break;
 		}
 		switch (j)
 		{
 		case 0:
-
+			if (stimestructure.Hours >= regularTimeAM_Hour && stimestructure.Hours <= regularTimePM_Hour)
+			{
+				OpenStepMotor_Start(2 * 3.14, 0);
+				OpenStepMotor_Stop();
+				k = 1;
+			}
+			else if (stimestructure.Hours < regularTimeAM_Hour && stimestructure.Hours > regularTimePM_Hour)
+			{
+				CloseStepMotor_Start(2 * 3.14, 0);
+				CloseStepMotor_Stop();
+				k = 2;
+			}
 			break;
 		case 1:
+			if (indoorADCValue < indoorLimitLowValue)
+			{
+				OpenStepMotor_Start(2 * 3.14, 0);
+				OpenStepMotor_Stop();
+				k = 1;
+			}
+			else if (indoorADCValue > indoorLimitHighValue)
+			{
+				CloseStepMotor_Start(2 * 3.14, 0);
+				CloseStepMotor_Stop();
+				k = 2;
+			}
+			if (outdoorADCValue < outdoorLimitLowValue)
+			{
+				OpenStepMotor_Start(2 * 3.14, 0);
+				OpenStepMotor_Stop();
+				k = 1;
+			}
+			else if (outdoorADCValue > outdoorLimitHighValue)
+			{
+				CloseStepMotor_Start(2 * 3.14, 0);
+				CloseStepMotor_Stop();
+				k = 2;
+			}
 			break;
 		case 2:
-			if (HAL_GPIO_ReadPin(Key_2_GPIO_Port, Key_2_Pin) == GPIO_PIN_RESET)
+			if (HAL_GPIO_ReadPin(Key_2_GPIO_Port, Key_2_Pin) == GPIO_PIN_RESET || charCmd == 1)
 			{
 				HAL_Delay(50);
 				OpenStepMotor_Start(2 * 3.14, 0);
 				OpenStepMotor_Stop();
+				k = 1;
 			}
-			else if (HAL_GPIO_ReadPin(Key_3_GPIO_Port, Key_3_Pin) == GPIO_PIN_RESET)
+			else if (HAL_GPIO_ReadPin(Key_3_GPIO_Port, Key_3_Pin) == GPIO_PIN_RESET || charCmd == 0)
 			{
 				HAL_Delay(50);
 				CloseStepMotor_Start(2 * 3.14, 0);
 				CloseStepMotor_Stop();
+				k = 2;
 			}
-			break;
-		default:
-
-			break;
-		}
-		switch (k % 2)
-		{
-		case 0:
-			OpenStepMotor_Start(2 * 3.14, 0);
-			OpenStepMotor_Stop();
-			break;
-		case 1:
-			CloseStepMotor_Start(2 * 3.14, 0);
-			CloseStepMotor_Stop();
 			break;
 		default:
 			OpenStepMotor_Stop();
@@ -228,16 +257,16 @@ int main(void)
 		}
 
 		printf("-------------------------\n");
-		printf("当前室内照度：%d Lx\n", indoorADCValue);
-		printf("当前室外照度：%d Lx\n", outdoorADCValue);
-		if (1)
+		if (k == 1)
 		{
-			printf("当前窗帘状态：打开！\n");
+			printf("当前状态：打开！\n");
 		}
-		else if (2)
+		else if (k == 2)
 		{
-			printf("当前窗帘状态：关闭！\n");
+			printf("当前状态：关闭！\n");
 		}
+		printf("\n");
+		printf("当前时间：%d-%d-%d, %d:%d:%d\n", sdatestructure.Year, sdatestructure.Month, sdatestructure.Date, stimestructure.Hours, stimestructure.Minutes, stimestructure.Seconds);
 		printf("-------------------------\n");
 
 		HAL_Delay(1000);

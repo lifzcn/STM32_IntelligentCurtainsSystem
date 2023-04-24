@@ -5,6 +5,7 @@
 "project\main.o"
 "project\gpio.o"
 "project\adc.o"
+"project\dma.o"
 "project\i2c.o"
 "project\rtc.o"
 "project\usart.o"
