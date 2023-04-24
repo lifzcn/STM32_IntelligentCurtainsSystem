@@ -32,14 +32,10 @@ Pin Nb	PINs	FUNCTIONs	LABELs
 6	PD1-OSC_OUT	RCC_OSC_OUT	
 10	PA0-WKUP	ADC1_IN0	
 11	PA1	ADC2_IN1	
-12	PA2	GPIO_Output	OpenStepMotor_IN1
-13	PA3	GPIO_Output	OpenStepMotor_IN2
-14	PA4	GPIO_Output	OpenStepMotor_IN3
-15	PA5	GPIO_Output	OpenStepMotor_IN4
-16	PA6	GPIO_Output	CloseStepMotor_IN1
-17	PA7	GPIO_Output	CloseStepMotor_IN2
-18	PB0	GPIO_Output	CloseStepMotor_IN3
-19	PB1	GPIO_Output	CloseStepMotor_IN4
+12	PA2	GPIO_Output	StepMotor_IN1
+13	PA3	GPIO_Output	StepMotor_IN2
+14	PA4	GPIO_Output	StepMotor_IN3
+15	PA5	GPIO_Output	StepMotor_IN4
 21	PB10	GPIO_Output	Sensor1_GND
 22	PB11	GPIO_Output	Sensor2_GND
 25	PB12	GPIO_Output	Key_GND
@@ -82,14 +78,10 @@ Pin Nb	PINs	FUNCTIONs	LABELs
 6	PD1-OSC_OUT	RCC_OSC_OUT	
 10	PA0-WKUP	ADC1_IN0	
 11	PA1	ADC2_IN1	
-12	PA2	GPIO_Output	OpenStepMotor_IN1
-13	PA3	GPIO_Output	OpenStepMotor_IN2
-14	PA4	GPIO_Output	OpenStepMotor_IN3
-15	PA5	GPIO_Output	OpenStepMotor_IN4
-16	PA6	GPIO_Output	CloseStepMotor_IN1
-17	PA7	GPIO_Output	CloseStepMotor_IN2
-18	PB0	GPIO_Output	CloseStepMotor_IN3
-19	PB1	GPIO_Output	CloseStepMotor_IN4
+12	PA2	GPIO_Output	StepMotor_IN1
+13	PA3	GPIO_Output	StepMotor_IN2
+14	PA4	GPIO_Output	StepMotor_IN3
+15	PA5	GPIO_Output	StepMotor_IN4
 21	PB10	GPIO_Output	Sensor1_GND
 22	PB11	GPIO_Output	Sensor2_GND
 25	PB12	GPIO_Output	Key_GND

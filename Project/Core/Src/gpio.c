@@ -51,29 +51,23 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, OpenStepMotor_IN1_Pin|OpenStepMotor_IN2_Pin|OpenStepMotor_IN3_Pin|OpenStepMotor_IN4_Pin
-                          |CloseStepMotor_IN1_Pin|CloseStepMotor_IN2_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, StepMotor_IN1_Pin|StepMotor_IN2_Pin|StepMotor_IN3_Pin|StepMotor_IN4_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, CloseStepMotor_IN3_Pin|CloseStepMotor_IN4_Pin|Sensor1_GND_Pin|Sensor2_GND_Pin
-                          |Key_GND_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, Sensor1_GND_Pin|Sensor2_GND_Pin|Key_GND_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, Sensor1_VCC_Pin|Sensor2_VCC_Pin, GPIO_PIN_SET);
 
-  /*Configure GPIO pins : PAPin PAPin PAPin PAPin
-                           PAPin PAPin */
-  GPIO_InitStruct.Pin = OpenStepMotor_IN1_Pin|OpenStepMotor_IN2_Pin|OpenStepMotor_IN3_Pin|OpenStepMotor_IN4_Pin
-                          |CloseStepMotor_IN1_Pin|CloseStepMotor_IN2_Pin;
+  /*Configure GPIO pins : PAPin PAPin PAPin PAPin */
+  GPIO_InitStruct.Pin = StepMotor_IN1_Pin|StepMotor_IN2_Pin|StepMotor_IN3_Pin|StepMotor_IN4_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PBPin PBPin PBPin PBPin
-                           PBPin */
-  GPIO_InitStruct.Pin = CloseStepMotor_IN3_Pin|CloseStepMotor_IN4_Pin|Sensor1_GND_Pin|Sensor2_GND_Pin
-                          |Key_GND_Pin;
+  /*Configure GPIO pins : PBPin PBPin PBPin */
+  GPIO_InitStruct.Pin = Sensor1_GND_Pin|Sensor2_GND_Pin|Key_GND_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;

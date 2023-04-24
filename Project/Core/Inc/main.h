@@ -57,22 +57,14 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define OpenStepMotor_IN1_Pin GPIO_PIN_2
-#define OpenStepMotor_IN1_GPIO_Port GPIOA
-#define OpenStepMotor_IN2_Pin GPIO_PIN_3
-#define OpenStepMotor_IN2_GPIO_Port GPIOA
-#define OpenStepMotor_IN3_Pin GPIO_PIN_4
-#define OpenStepMotor_IN3_GPIO_Port GPIOA
-#define OpenStepMotor_IN4_Pin GPIO_PIN_5
-#define OpenStepMotor_IN4_GPIO_Port GPIOA
-#define CloseStepMotor_IN1_Pin GPIO_PIN_6
-#define CloseStepMotor_IN1_GPIO_Port GPIOA
-#define CloseStepMotor_IN2_Pin GPIO_PIN_7
-#define CloseStepMotor_IN2_GPIO_Port GPIOA
-#define CloseStepMotor_IN3_Pin GPIO_PIN_0
-#define CloseStepMotor_IN3_GPIO_Port GPIOB
-#define CloseStepMotor_IN4_Pin GPIO_PIN_1
-#define CloseStepMotor_IN4_GPIO_Port GPIOB
+#define StepMotor_IN1_Pin GPIO_PIN_2
+#define StepMotor_IN1_GPIO_Port GPIOA
+#define StepMotor_IN2_Pin GPIO_PIN_3
+#define StepMotor_IN2_GPIO_Port GPIOA
+#define StepMotor_IN3_Pin GPIO_PIN_4
+#define StepMotor_IN3_GPIO_Port GPIOA
+#define StepMotor_IN4_Pin GPIO_PIN_5
+#define StepMotor_IN4_GPIO_Port GPIOA
 #define Sensor1_GND_Pin GPIO_PIN_10
 #define Sensor1_GND_GPIO_Port GPIOB
 #define Sensor2_GND_Pin GPIO_PIN_11
