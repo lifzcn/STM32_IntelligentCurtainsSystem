@@ -165,6 +165,7 @@ int main(void)
 			HAL_Delay(50);
 			i += 1;
 		}
+		
 		switch (i % 3)
 		{
 		case 0:
@@ -192,62 +193,63 @@ int main(void)
 			j = 0;
 			break;
 		}
+		
 		switch (j)
 		{
 		case 0:
 			if (stimestructure.Hours >= regularTimeAM_Hour && stimestructure.Hours <= regularTimePM_Hour)
 			{
-				StepMotor_Start(2 * 3.14, 0);
+				StepMotor_Start(360 * 3, 0);
 				StepMotor_Stop();
 				k = 1;
 			}
 			else if (stimestructure.Hours < regularTimeAM_Hour && stimestructure.Hours > regularTimePM_Hour)
 			{
-				StepMotor_Start(2 * 3.14, 1);
+				StepMotor_Start(360 * 3, 1);
 				StepMotor_Stop();
 				k = 2;
 			}
 			break;
 		case 1:
-			if (indoorADCValue < indoorLimitLowValue)
+			if (k != 1)
 			{
-				StepMotor_Start(2 * 3.14, 0);
-				StepMotor_Stop();
-				k = 1;
+				if (indoorADCValue <= indoorLimitLowValue)
+				{
+					StepMotor_Start(360 * 3, 0);
+					StepMotor_Stop();
+					k = 1;
+				}
 			}
-			else if (indoorADCValue > indoorLimitHighValue)
+			if (k != 2)
 			{
-				StepMotor_Start(2 * 3.14, 1);
-				StepMotor_Stop();
-				k = 2;
-			}
-			if (outdoorADCValue < outdoorLimitLowValue)
-			{
-				StepMotor_Start(2 * 3.14, 0);
-				StepMotor_Stop();
-				k = 1;
-			}
-			else if (outdoorADCValue > outdoorLimitHighValue)
-			{
-				StepMotor_Start(2 * 3.14, 1);
-				StepMotor_Stop();
-				k = 2;
+				if (indoorADCValue >= indoorLimitHighValue)
+				{
+					StepMotor_Start(360 * 3, 1);
+					StepMotor_Stop();
+					k = 2;
+				}
 			}
 			break;
 		case 2:
-			if (HAL_GPIO_ReadPin(Key_2_GPIO_Port, Key_2_Pin) == GPIO_PIN_RESET || charCmd == 1)
+			if (HAL_GPIO_ReadPin(Key_2_GPIO_Port, Key_2_Pin) == GPIO_PIN_RESET || charCmd == '1')
 			{
 				HAL_Delay(50);
-				StepMotor_Start(2 * 3.14, 0);
-				StepMotor_Stop();
-				k = 1;
+				if (k != 1)
+				{
+					StepMotor_Start(360 * 3, 0);
+					StepMotor_Stop();
+					k = 1;
+				}
 			}
-			else if (HAL_GPIO_ReadPin(Key_3_GPIO_Port, Key_3_Pin) == GPIO_PIN_RESET || charCmd == 0)
+			else if (HAL_GPIO_ReadPin(Key_3_GPIO_Port, Key_3_Pin) == GPIO_PIN_RESET || charCmd == '0')
 			{
 				HAL_Delay(50);
-				StepMotor_Start(2 * 3.14, 1);
-				StepMotor_Stop();
-				k = 2;
+				if (k != 2)
+				{
+					StepMotor_Start(360 * 3, 1);
+					StepMotor_Stop();
+					k = 2;
+				}
 			}
 			break;
 		default:
