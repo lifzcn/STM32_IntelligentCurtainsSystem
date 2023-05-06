@@ -85,7 +85,6 @@ int main(void)
 	uint8_t k = 0;
 	uint8_t rxBuffer[1];
 	uint8_t charCmd;
-	uint8_t regularTime_Hour = 0;
 	uint8_t regularTimeAM_Hour = 8;
 	uint8_t regularTimePM_Hour = 20;
   /* USER CODE END 1 */
@@ -250,6 +249,22 @@ int main(void)
 					StepMotor_Stop();
 					k = 2;
 				}
+			}
+			if (charCmd == '2')
+			{
+				regularTimeAM_Hour += 1;
+			}
+			else if (charCmd == '3')
+			{
+				regularTimeAM_Hour -= 1;
+			}
+			if (charCmd == '4')
+			{
+				regularTimePM_Hour += 1;
+			}
+			else if (charCmd == '5')
+			{
+				regularTimePM_Hour -= 1;
 			}
 			break;
 		default:
