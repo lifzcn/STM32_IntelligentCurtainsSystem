@@ -85,8 +85,10 @@ int main(void)
 	uint8_t k = 0;
 	uint8_t rxBuffer[1];
 	uint8_t charCmd;
-	uint8_t regularTimeAM_Hour = 8;
-	uint8_t regularTimePM_Hour = 20;
+	uint8_t regularTimeAM_Hour = 12;
+	uint8_t regularTimeAM_Minute = 30;
+	uint8_t regularTimePM_Hour = 18;
+	uint8_t regularTimePM_Minute = 30;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -114,7 +116,6 @@ int main(void)
   MX_I2C1_Init();
   MX_ADC2_Init();
   /* USER CODE BEGIN 2 */
-	HAL_ADC_Start(&hadc1);
 	OLED_Init();
 	OLED_Clear();
 	OLED_ShowChinese(x + 16 + 16 * 0, y + 2 * 0, 0);
@@ -196,17 +197,23 @@ int main(void)
 		switch (j)
 		{
 		case 0:
-			if (stimestructure.Hours >= regularTimeAM_Hour && stimestructure.Hours <= regularTimePM_Hour)
+			if (stimestructure.Hours == regularTimeAM_Hour)
 			{
-				StepMotor_Start(360 * 3, 0);
-				StepMotor_Stop();
-				k = 1;
+				if (stimestructure.Minutes == regularTimeAM_Minute)
+				{
+					StepMotor_Start(360 * 3, 0);
+					StepMotor_Stop();
+					k = 1;
+				}
 			}
-			else if (stimestructure.Hours < regularTimeAM_Hour && stimestructure.Hours > regularTimePM_Hour)
+			else if (stimestructure.Hours == regularTimePM_Hour)
 			{
-				StepMotor_Start(360 * 3, 1);
-				StepMotor_Stop();
-				k = 2;
+				if (stimestructure.Minutes == regularTimePM_Minute)
+				{
+					StepMotor_Start(360 * 3, 1);
+				  StepMotor_Stop();
+				  k = 2;
+				}
 			}
 			break;
 		case 1:
@@ -250,27 +257,41 @@ int main(void)
 					k = 2;
 				}
 			}
-			if (charCmd == '2')
+			switch(charCmd)
 			{
-				regularTimeAM_Hour += 1;
+				case '2':
+					regularTimeAM_Hour += 1;
+				break;
+				case '3':
+					regularTimeAM_Hour -= 1;
+				break;
+				case '4':
+					regularTimeAM_Minute += 5;
+				break;
+				case '5':
+					regularTimeAM_Minute -= 5;
+				break;
+				case '6':
+					regularTimePM_Hour += 1;
+				break;
+				case '7':
+					regularTimePM_Hour -= 1;
+				break;
+				case '8':
+					regularTimePM_Minute += 5;
+				break;
+				case '9':
+					regularTimePM_Minute -= 5;
+				break;
+				default:
+					;
+				break;
 			}
-			else if (charCmd == '3')
-			{
-				regularTimeAM_Hour -= 1;
-			}
-			if (charCmd == '4')
-			{
-				regularTimePM_Hour += 1;
-			}
-			else if (charCmd == '5')
-			{
-				regularTimePM_Hour -= 1;
-			}
-			break;
+		break;
 		default:
 			StepMotor_Stop();
 			StepMotor_Stop();
-			break;
+		break;
 		}
 
 		printf("-------------------------\n");
